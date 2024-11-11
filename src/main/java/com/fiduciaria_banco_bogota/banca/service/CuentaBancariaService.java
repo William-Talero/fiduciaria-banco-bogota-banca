@@ -5,12 +5,14 @@ import com.fiduciaria_banco_bogota.banca.model.Transaccion;
 import com.fiduciaria_banco_bogota.banca.repository.ICuentaBancariaRepository;
 import com.fiduciaria_banco_bogota.banca.repository.ITransaccionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class CuentaBancariaService {
@@ -84,7 +86,7 @@ public class CuentaBancariaService {
         return cuenta.getSaldo();
     }
 
-    public List<CuentaBancaria> getAll() {
-        return cuentaBancariaRepository.findAll();
+    public Page<CuentaBancaria> getAll(Boolean enablePagination, Integer page, Integer size) {
+        return cuentaBancariaRepository.findAll(enablePagination ? PageRequest.of(page, size) : Pageable.unpaged());
     }
 }

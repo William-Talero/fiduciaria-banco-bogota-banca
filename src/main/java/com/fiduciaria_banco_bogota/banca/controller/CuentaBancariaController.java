@@ -6,6 +6,7 @@ import com.fiduciaria_banco_bogota.banca.model.CuentaBancaria;
 import com.fiduciaria_banco_bogota.banca.service.CuentaBancariaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/accounts")
 public class CuentaBancariaController {
@@ -45,8 +47,10 @@ public class CuentaBancariaController {
     }
 
     @GetMapping("/GetAll")
-    public ResponseEntity<List<CuentaBancaria>> getALl() {
-        List<CuentaBancaria> accounts = cuentaBancariaService.getAll();
-        return ResponseEntity.ok(accounts);
+    public ResponseEntity<Page<CuentaBancaria>> getAll(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "10")Integer size,
+            @RequestParam(required = false, defaultValue = "false")Boolean enablePagination) {
+        return ResponseEntity.ok(cuentaBancariaService.getAll(enablePagination, page, size));
     }
 }
